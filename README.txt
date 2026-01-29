@@ -1,0 +1,1 @@
+Upload to Cloudflare Pages as static site.
