@@ -1,131 +1,237 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wallet Reporters</title>
-  <link rel="stylesheet" href="./styles.css"/>
+  <link rel="stylesheet" href="./styles.css" />
 </head>
-<body>
-  <div class="topbar">
-    <div class="container">
-      <div class="topbar-inner">
-        <div class="brand">
-          <img src="./assets/logo.png" alt="Wallet Reporters logo" onerror="this.style.display='none'"/>
-          <div>
-            <div class="brand-title">Wallet Reporters</div>
-            <div class="brand-sub">A public registry of reported crypto wallets</div>
-          </div>
+<body class="wr-body">
+
+  <!-- Top utility bar -->
+  <div class="wr-topbar">
+    <div class="wr-topbar-inner">
+      <div class="wr-brand">
+        <div class="wr-logo" aria-hidden="true">
+          <!-- simple shield icon -->
+          <svg viewBox="0 0 64 64" width="34" height="34" aria-hidden="true">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#0ea5e9"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 6 52 14v18c0 13-8 20-20 26C20 52 12 45 12 32V14L32 6z" fill="url(#g)"/>
+            <path d="M26 33l4 4 9-11" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
-        <nav class="nav" aria-label="Primary">
-          <a href="#victims">For Victims</a>
-          <a href="#law">For Law Enforcement</a>
-          <a href="#influencers">For Influencers & NGOs</a>
-          <a href="#gov">Government & Regulators</a>
-        </nav>
-        <div class="actions">
-          <a class="btn" href="./registry.html">Registry</a>
-          <button class="btn btn-green" id="openReportTop">See a suspicious wallet? Report here →</button>
+        <div class="wr-brandtext">
+          <div class="wr-brandtitle">Wallet Reporters</div>
+          <div class="wr-brandsub">Report Cryptocurrency Scams &amp; Fraud</div>
         </div>
       </div>
+
+      <button id="openReport" class="wr-cta-green">
+        See a suspicious wallet? <span>Report here →</span>
+      </button>
     </div>
   </div>
 
-  <main class="container">
-    <section class="hero-wrap">
-      <div class="hero">
-        <div class="hero-inner">
-          <div class="hero-left">
-            <div class="hero-kicker"><span class="tick"></span>Report Cryptocurrency Scams & Fraud</div>
-            <h1>Help protect others by reporting suspicious crypto wallets.</h1>
-            <p>
-              Reports are routed to law enforcement, regulators, analysts, and exchanges. We generate automated tracing summaries
-              and standardized evidence packages — without collecting private keys.
-            </p>
-            <div class="hero-cta">
-              <button class="btn btn-cta" id="openReportHero">Report a Wallet</button>
-              <a class="btn btn-dark" href="./registry.html">Search the Registry</a>
-            </div>
+  <!-- Main navigation row -->
+  <header class="wr-navwrap">
+    <nav class="wr-nav">
+      <a href="#victims">For Victims</a>
+      <a href="#law">For Law Enforcement</a>
+      <a href="#influencers">For Influencers &amp; NGOs</a>
+      <a href="#gov">Government &amp; Regulators</a>
+    </nav>
+  </header>
 
-            <div class="checks">
-              <div class="item"><div class="check">✓</div><div>Report crypto wallets directly linked to scams</div></div>
-              <div class="item"><div class="check">✓</div><div>Securely route data to police, regulators, and partners</div></div>
-              <div class="item"><div class="check">✓</div><div>Free path with a police report</div></div>
-              <div class="item"><div class="check">✓</div><div>No private keys required</div></div>
-            </div>
-          </div>
-          <div class="hero-right" aria-hidden="true">
-            <img src="./assets/hero-illustration.svg" alt=""/>
-          </div>
+  <main class="wr-container">
+    <!-- HERO -->
+    <section class="wr-hero">
+      <div class="wr-hero-left">
+        <h1>Report Cryptocurrency Scams<br/>&amp; Fraud</h1>
+        <p class="wr-lead">
+          Help protect others by reporting suspicious crypto wallets. Reports are routed to law enforcement,
+          regulators, analysts, and exchanges.
+        </p>
+
+        <button id="openReport2" class="wr-btn wr-btn-orange">Report a Wallet</button>
+
+        <div class="wr-hero-checks">
+          <div class="wr-check">✓ Report crypto wallets directly linked to scams</div>
+          <div class="wr-check">✓ Free, anonymous, and no private keys required</div>
+          <div class="wr-check">✓ Securely route data to police, regulators, and partners</div>
+          <div class="wr-check">✓ Police report number supported and protect our community</div>
+        </div>
+      </div>
+
+      <div class="wr-hero-right">
+        <div class="wr-illustration" aria-hidden="true">
+          <!-- Inline SVG illustration (self-contained; no external assets) -->
+          <svg viewBox="0 0 760 420" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#e7f1ff"/><stop offset="1" stop-color="#f2f7ff"/>
+              </linearGradient>
+              <linearGradient id="pc" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#c7d2fe"/><stop offset="1" stop-color="#93c5fd"/>
+              </linearGradient>
+              <linearGradient id="coin" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f59e0b"/>
+              </linearGradient>
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0b1b3a" flood-opacity=".18"/>
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="760" height="420" rx="24" fill="url(#bg)"/>
+
+            <!-- floating icons -->
+            <g opacity=".7">
+              <rect x="65" y="90" width="56" height="38" rx="10" fill="#dbeafe"/>
+              <circle cx="660" cy="110" r="28" fill="#dbeafe"/>
+              <path d="M650 110h20" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
+            </g>
+
+            <!-- computer -->
+            <g filter="url(#shadow)">
+              <rect x="270" y="90" width="380" height="220" rx="18" fill="url(#pc)"/>
+              <rect x="292" y="112" width="336" height="150" rx="12" fill="#ffffff" opacity=".92"/>
+              <rect x="330" y="280" width="260" height="16" rx="8" fill="#93c5fd" opacity=".6"/>
+              <rect x="410" y="302" width="100" height="18" rx="9" fill="#93c5fd" opacity=".55"/>
+            </g>
+
+            <!-- warning -->
+            <g transform="translate(610 52)" filter="url(#shadow)">
+              <path d="M38 0 76 68H0L38 0z" fill="#fbbf24"/>
+              <rect x="34" y="20" width="8" height="24" rx="4" fill="#111827"/>
+              <circle cx="38" cy="54" r="5" fill="#111827"/>
+            </g>
+
+            <!-- coins -->
+            <g transform="translate(140 240)" filter="url(#shadow)">
+              <ellipse cx="70" cy="105" rx="88" ry="16" fill="#0b1b3a" opacity=".12"/>
+              <g>
+                <ellipse cx="30" cy="52" rx="40" ry="14" fill="#d1d5db" opacity=".25"/>
+                <rect x="-10" y="12" width="80" height="48" rx="14" fill="url(#coin)"/>
+                <ellipse cx="30" cy="12" rx="40" ry="14" fill="#fef3c7"/>
+              </g>
+              <g transform="translate(72 10)">
+                <ellipse cx="30" cy="52" rx="40" ry="14" fill="#d1d5db" opacity=".25"/>
+                <rect x="-10" y="0" width="80" height="60" rx="14" fill="url(#coin)"/>
+                <ellipse cx="30" cy="0" rx="40" ry="14" fill="#fef3c7"/>
+              </g>
+              <g transform="translate(30 -10)">
+                <circle cx="118" cy="30" r="22" fill="url(#coin)"/>
+                <text x="118" y="38" text-anchor="middle" font-family="system-ui,Segoe UI,Arial" font-size="22" font-weight="900" fill="#111827">₿</text>
+              </g>
+            </g>
+          </svg>
         </div>
       </div>
     </section>
 
-    <section class="partners">
-      <div class="partners-row">
-        <div class="label">Our Partners:</div>
-        <img class="partner-logo" src="./assets/canada.svg" alt="Canada (placeholder)"/>
-        <img class="partner-logo" src="./assets/newton.svg" alt="Newton Crypto (placeholder)"/>
-        <img class="partner-logo" src="./assets/chainalysis.svg" alt="Chainalysis (placeholder)"/>
-        <img class="partner-logo" src="./assets/opp.svg" alt="OPP (placeholder)"/>
+    <!-- Partners -->
+    <section class="wr-partners">
+      <div class="wr-partners-label">Our Partners:</div>
+      <div class="wr-partners-row">
+        <div class="wr-partner">Canada</div>
+        <div class="wr-partner">Newton</div>
+        <div class="wr-partner">Chainalysis</div>
       </div>
     </section>
 
-    <section class="section" id="victims">
-      <h2>Scammers rely on anonymity. We make reporting easy.</h2>
-      <div class="cards">
-        <div class="card">
-          <h3>For Victims</h3>
-          <p>Report suspicious wallets involved in scams to help prevent future losses. Choose free (with police report), paid (100 USDC), or crypto ATM deposit.</p>
-        </div>
-        <div class="card" id="law">
-          <h3>For Law Enforcement</h3>
-          <p>Discover and track illicit wallets to aid investigations and disrupt crypto crime. Receive standardized, automated tracing summaries and artifacts.</p>
-        </div>
-        <div class="card" id="influencers">
-          <h3>For Influencers & NGOs</h3>
-          <p>Embed our reporting widget to route victims to an official, safe intake process — and reduce impersonation risk.</p>
-        </div>
-      </div>
-    </section>
+    <!-- Middle section -->
+    <section class="wr-mid" id="victims">
+      <h2>Scammers Rely on Anonymity. We Make Reporting Easy.</h2>
 
-    <section class="section" id="gov">
-      <div class="lower">
-        <div class="card">
-          <h2>How It Works</h2>
-          <div class="checks" style="margin-top:0">
-            <div class="item"><div class="check">✓</div><div>Victims are never asked for private keys.</div></div>
-            <div class="item"><div class="check">✓</div><div>Reports do not imply guilt — they provide leads.</div></div>
-            <div class="item"><div class="check">✓</div><div>Automated tracing report generation.</div></div>
-            <div class="item"><div class="check">✓</div><div>Reports routed automatically (no direct police contact).</div></div>
+      <div class="wr-mid-grid">
+        <div class="wr-card">
+          <div class="wr-cardhead">
+            <div class="wr-cardicon">🛡️</div>
+            <div class="wr-cardtitle">For Victims</div>
           </div>
-          <p style="margin-top:12px;color:var(--muted)"><strong>Disclaimer:</strong> We do not contact police departments or investigating officers directly. All submissions generate automated reports.</p>
-          <button class="btn btn-dark" id="openReportLower">Detailed Process Overview (demo)</button>
+          <p>Report suspicious wallets involved in scams to help prevent future losses.</p>
         </div>
 
-        <div class="card">
-          <h2>Recent Wallet Reports</h2>
-          <table class="table">
-            <thead><tr><th>ID</th><th>Coin</th><th>Reported Wallet</th><th>Status</th></tr></thead>
-            <tbody id="recentReports"></tbody>
-          </table>
-          <div style="display:flex;justify-content:flex-end;margin-top:10px">
-            <a class="btn" href="./registry.html">View All Reports →</a>
+        <div class="wr-card" id="law">
+          <div class="wr-cardhead">
+            <div class="wr-cardicon">👮</div>
+            <div class="wr-cardtitle">For Law Enforcement</div>
+          </div>
+          <p>Discover and track illicit wallets to aid in investigations and disrupt crypto crime.</p>
+        </div>
+
+        <div class="wr-officer">
+          <div class="wr-officer-photo" aria-hidden="true"></div>
+          <div class="wr-officer-meta">
+            <div class="wr-officer-name">Det. Jessica Parker</div>
+            <div class="wr-officer-sub">Cybercrime Division</div>
           </div>
         </div>
       </div>
+
+      <div class="wr-mid-bullets">
+        <div>
+          <div class="wr-mid-subtitle">Scammers Rely on Anonymity.</div>
+          <ul>
+            <li>We can't recover lost funds.</li>
+            <li>Victims are never asked for private keys.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="wr-mid-subtitle">&nbsp;</div>
+          <ul>
+            <li>Victims are never asked for private keys.</li>
+            <li>Suspects are never accused without proof.</li>
+          </ul>
+        </div>
+      </div>
     </section>
+
+    <!-- How it works + recent reports -->
+    <section class="wr-lower" id="influencers">
+      <div class="wr-how">
+        <h3>How It Works</h3>
+        <ul>
+          <li>Invaluable resource. Streamlines reporting</li>
+          <li>Victims are never asked for private keys. Suspects are never accused without proof.</li>
+          <li>Reports do not imply guilt — they provide leads for investigation.</li>
+        </ul>
+        <a class="wr-btn wr-btn-light" href="./registry.html">Detailed Process Overview</a>
+      </div>
+
+      <div class="wr-recent" id="gov">
+        <h3>Recent Wallet Reports</h3>
+        <div class="wr-table">
+          <div class="wr-tr wr-head">
+            <div>ID</div><div>Coin</div><div>Reported Wallet</div><div>Status</div>
+          </div>
+          <div class="wr-tr">
+            <div>5/0002</div><div>BTC</div><div>1KFjurbL…</div><div>23 minutes ago</div>
+          </div>
+          <div class="wr-tr">
+            <div>5/00018</div><div>ETH</div><div>0xabc1234e5…</div><div>1 hour ago</div>
+          </div>
+          <div class="wr-tr">
+            <div>6/00095</div><div>ETH</div><div>0xf17aab3c…</div><div>2 hours ago</div>
+          </div>
+          <div class="wr-tr">
+            <div>5/0035</div><div>BTC</div><div>bc1gpbna…</div><div>4 hours ago</div>
+          </div>
+        </div>
+        <a class="wr-viewall" href="./registry.html">View All Reports →</a>
+      </div>
+    </section>
+
+    <footer class="wr-footer">
+      Wallet Reporters does not contact police departments or investigating officers. All submissions generate
+      automated reports only. We do not ask for private keys.
+    </footer>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p>
-        Wallet Reporters does not contact police departments or investigating officers. All submissions generate automated reports only.
-        Identity verification (when required) is performed by third-party providers. We do not receive or store personal identity data from those services.
-      </p>
-    </div>
-  </footer>
-
+  <!-- Modal (kept compatible with your existing JS) -->
   <div id="wrModal" class="wr-modal" aria-hidden="true">
     <div class="wr-modal-backdrop" data-close></div>
     <div class="wr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="wrModalTitle">
@@ -136,7 +242,9 @@
       <div class="wr-modal-body">
         <div id="wallet-reporters-widget"></div>
       </div>
-      <div class="wr-modal-footer"><small>We do not recover funds. We do not ask for private keys.</small></div>
+      <div class="wr-modal-footer">
+        <small>We do not recover funds. We do not ask for private keys.</small>
+      </div>
     </div>
   </div>
 
