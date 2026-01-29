@@ -1,1 +1,66 @@
-<html><body><h1>Registry</h1></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registry • Wallet Reporters</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">WR</div>
+      <div class="brand-text">
+        <div class="brand-title">Wallet Reporters</div>
+        <div class="brand-sub">Registry Explorer (demo)</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a class="btn btn-ghost" href="./index.html">Home</a>
+      <button id="openReport" class="btn btn-primary">Report a Wallet</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h1 class="h2">Search the Registry</h1>
+      <p class="muted">Demo-only list. Replace with your real backend later.</p>
+
+      <div class="row">
+        <input id="searchWallet" class="input" placeholder="Paste a wallet address…" />
+        <button id="searchBtn" class="btn btn-primary">Search</button>
+      </div>
+
+      <div id="searchResult" class="muted" style="margin-top:12px;"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="h3">Recent Wallet Reports (demo)</h2>
+      <div class="table" id="recentTable"></div>
+      <p class="fineprint" style="margin-top:10px;">
+        A reported wallet does not imply wrongdoing. It indicates a wallet has been submitted for review.
+      </p>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="wrModal" class="wr-modal" aria-hidden="true">
+    <div class="wr-modal-backdrop" data-close></div>
+    <div class="wr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="wrModalTitle">
+      <div class="wr-modal-header">
+        <h2 id="wrModalTitle">Report a Wallet</h2>
+        <button class="wr-modal-close" type="button" aria-label="Close" data-close>✕</button>
+      </div>
+      <div class="wr-modal-body">
+        <div id="wallet-reporters-widget"></div>
+      </div>
+      <div class="wr-modal-footer">
+        <small>We do not recover funds. We do not ask for private keys.</small>
+      </div>
+    </div>
+  </div>
+
+  <script src="./main.js"></script>
+  <script src="./wallet-reporters-snippet.js"></script>
+</body>
+</html>
