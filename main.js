@@ -1,60 +1,63 @@
 (() => {
   const modal = document.getElementById("wrModal");
-  const openBtns = [
-    document.getElementById("openReport"),
-    document.getElementById("openReport2"),
-    ...Array.from(document.querySelectorAll(".openReportAny")),
-  ].filter(Boolean);
+  const openBtns = ["openReportTop","openReportHero","openReportLower"].map(id => document.getElementById(id)).filter(Boolean);
 
-  function openModal() {
-    if (!modal) return;
+  function openModal(){
+    if(!modal) return;
     modal.setAttribute("aria-hidden","false");
-    document.body.style.overflow = "hidden";
-    setTimeout(() => {
-      const first = modal.querySelector("input, select, textarea, button");
-      if (first) first.focus();
-    }, 50);
+    document.body.style.overflow="hidden";
+    setTimeout(()=>modal.querySelector("input,select,textarea,button")?.focus(),60);
   }
-  function closeModal() {
-    if (!modal) return;
+  function closeModal(){
+    if(!modal) return;
     modal.setAttribute("aria-hidden","true");
-    document.body.style.overflow = "";
+    document.body.style.overflow="";
   }
 
-  openBtns.forEach(b => b.addEventListener("click", openModal));
-  modal?.addEventListener("click", (e) => {
-    const t = e.target;
-    if (t && t.matches("[data-close]")) closeModal();
-  });
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal?.getAttribute("aria-hidden")==="false") closeModal();
+  openBtns.forEach(b=>b.addEventListener("click",openModal));
+  modal?.addEventListener("click",(e)=>{ if(e.target?.matches("[data-close]")) closeModal(); });
+  window.addEventListener("keydown",(e)=>{ if(e.key==="Escape" && modal?.getAttribute("aria-hidden")==="false") closeModal(); });
+
+  // Demo recent reports
+  const tbodies = document.querySelectorAll("#recentReports");
+  const demo = JSON.parse(localStorage.getItem("wr_demo_reports") || "[]");
+  const seeded = demo.length ? demo : seed();
+  tbodies.forEach(tbody=>{
+    tbody.innerHTML = seeded.slice().reverse().slice(0,6).map(r=>row(r)).join("");
   });
 
-  // Demo registry rendering
-  const recentTable = document.getElementById("recentTable");
-  if (recentTable) {
-    const demo = JSON.parse(localStorage.getItem("wr_demo_reports") || "[]");
-    const rows = ['<div class="tr"><div class="td">Report ID</div><div class="td">Reported Wallet</div><div class="td">Status</div></div>'];
-    demo.slice().reverse().slice(0,8).forEach(r => {
-      rows.push(`<div class="tr"><div class="td">${esc(r.report_id)}</div><div class="td">${esc((r.reported_wallets||[])[0]||"")}</div><div class="td">${esc(r.status||"Submitted")}</div></div>`);
-    });
-    recentTable.innerHTML = rows.join("");
-  }
-
-  const searchBtn = document.getElementById("searchBtn");
-  const searchWallet = document.getElementById("searchWallet");
-  const searchResult = document.getElementById("searchResult");
-  if (searchBtn && searchWallet && searchResult) {
-    searchBtn.addEventListener("click", () => {
-      const q = (searchWallet.value||"").trim().toLowerCase();
-      if (!q) { searchResult.textContent = "Paste a wallet address to search."; return; }
-      const demo = JSON.parse(localStorage.getItem("wr_demo_reports") || "[]");
-      const hit = demo.find(r => (r.reported_wallets||[]).some(w => (w||"").toLowerCase() === q));
-      searchResult.innerHTML = hit
-        ? `<strong>Reported:</strong> Yes • <span class="muted">Report ID ${esc(hit.report_id)}</span>`
-        : `<strong>Reported:</strong> Not found in demo registry`;
+  // Registry search
+  const searchBtn=document.getElementById("searchBtn");
+  const searchWallet=document.getElementById("searchWallet");
+  const searchResult=document.getElementById("searchResult");
+  if(searchBtn && searchWallet && searchResult){
+    searchBtn.addEventListener("click",()=>{
+      const q=(searchWallet.value||"").trim().toLowerCase();
+      if(!q){ searchResult.textContent="Paste a wallet address to search."; return; }
+      const items = JSON.parse(localStorage.getItem("wr_demo_reports") || "[]");
+      const hit = items.find(r => (r.reported_wallets||[]).some(w => (w||"").toLowerCase()===q));
+      searchResult.innerHTML = hit ? `<strong>Reported:</strong> Yes • <span style="color:#64748b">Report ID ${esc(hit.report_id)}</span>`
+                                  : `<strong>Reported:</strong> Not found in demo registry`;
     });
   }
 
+  function row(r){
+    return `<tr>
+      <td>${esc(r.report_id)}</td>
+      <td><span class="badge"><span class="coin"></span>${esc(r.coin||"USDC")}</span></td>
+      <td>${esc((r.reported_wallets||[])[0]||"")}</td>
+      <td>${esc(r.status||"Submitted")}</td>
+    </tr>`;
+  }
+  function seed(){
+    const s=[
+      {report_id:"5/0002", coin:"BTC", reported_wallets:["1KFjurbL…"], status:"23 minutes ago"},
+      {report_id:"5/0001", coin:"ETH", reported_wallets:["0xabc1234e5…"], status:"1 hour ago"},
+      {report_id:"5/0005", coin:"ETH", reported_wallets:["0xf17aab3c…"], status:"2 hours ago"},
+      {report_id:"5/0095", coin:"BTC", reported_wallets:["bc1qpbna…"], status:"4 hours ago"},
+    ];
+    localStorage.setItem("wr_demo_reports", JSON.stringify(s));
+    return s;
+  }
   function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 })();
