@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="46" viewBox="0 0 180 46">
+      <rect width="180" height="46" rx="10" fill="#fff" stroke="#e5e7eb"/>
+      <circle cx="28" cy="23" r="12" fill="#0ea5e9"/><circle cx="28" cy="23" r="6" fill="#fff"/>
+      <text x="52" y="29" font-family="system-ui,Segoe UI,Arial" font-size="16" font-weight="800" fill="#111827">Newton</text>
+      <text x="118" y="29" font-family="system-ui,Segoe UI,Arial" font-size="12" font-weight="700" fill="#6b7280">Crypto</text>
+    </svg>

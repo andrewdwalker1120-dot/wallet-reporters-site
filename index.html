@@ -1,113 +1,131 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Wallet Reporters</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css"/>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">WR</div>
-      <div class="brand-text">
-        <div class="brand-title">Wallet Reporters</div>
-        <div class="brand-sub">A public registry of reported crypto wallets</div>
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <div class="brand">
+          <img src="./assets/logo.png" alt="Wallet Reporters logo" onerror="this.style.display='none'"/>
+          <div>
+            <div class="brand-title">Wallet Reporters</div>
+            <div class="brand-sub">A public registry of reported crypto wallets</div>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Primary">
+          <a href="#victims">For Victims</a>
+          <a href="#law">For Law Enforcement</a>
+          <a href="#influencers">For Influencers & NGOs</a>
+          <a href="#gov">Government & Regulators</a>
+        </nav>
+        <div class="actions">
+          <a class="btn" href="./registry.html">Registry</a>
+          <button class="btn btn-green" id="openReportTop">See a suspicious wallet? Report here →</button>
+        </div>
       </div>
     </div>
-    <nav class="nav">
-      <a href="#victims">Victims</a>
-      <a href="#law">Law Enforcement</a>
-      <a href="#influencers">Influencers & NGOs</a>
-      <a href="#gov">Government & Regulators</a>
-      <a class="btn btn-ghost" href="./registry.html">Registry</a>
-      <button id="openReport" class="btn btn-primary">Report a Wallet</button>
-    </nav>
-  </header>
+  </div>
 
   <main class="container">
-    <section class="hero">
-      <div class="hero-left">
-        <h1>Report Scam Crypto Wallets.</h1>
-        <h2>Help Stop Crypto Crime. Protect Others.</h2>
-        <p class="lead">
-          Wallet Reporters provides a secure way to report cryptocurrency wallets used in scams and route that information
-          to law enforcement, regulators, and exchanges.
-        </p>
-        <ul class="bullets">
-          <li>We do <strong>not</strong> recover funds.</li>
-          <li>We do <strong>not</strong> contact victims.</li>
-          <li>We do <strong>not</strong> ask for private keys.</li>
-        </ul>
-        <div class="cta-row">
-          <button id="openReport2" class="btn btn-primary btn-lg">Report a Wallet</button>
-          <a class="btn btn-ghost btn-lg" href="./registry.html">Search the Registry</a>
+    <section class="hero-wrap">
+      <div class="hero">
+        <div class="hero-inner">
+          <div class="hero-left">
+            <div class="hero-kicker"><span class="tick"></span>Report Cryptocurrency Scams & Fraud</div>
+            <h1>Help protect others by reporting suspicious crypto wallets.</h1>
+            <p>
+              Reports are routed to law enforcement, regulators, analysts, and exchanges. We generate automated tracing summaries
+              and standardized evidence packages — without collecting private keys.
+            </p>
+            <div class="hero-cta">
+              <button class="btn btn-cta" id="openReportHero">Report a Wallet</button>
+              <a class="btn btn-dark" href="./registry.html">Search the Registry</a>
+            </div>
+
+            <div class="checks">
+              <div class="item"><div class="check">✓</div><div>Report crypto wallets directly linked to scams</div></div>
+              <div class="item"><div class="check">✓</div><div>Securely route data to police, regulators, and partners</div></div>
+              <div class="item"><div class="check">✓</div><div>Free path with a police report</div></div>
+              <div class="item"><div class="check">✓</div><div>No private keys required</div></div>
+            </div>
+          </div>
+          <div class="hero-right" aria-hidden="true">
+            <img src="./assets/hero-illustration.svg" alt=""/>
+          </div>
         </div>
-        <p class="fineprint">
-          A reported wallet does not imply wrongdoing. It indicates a wallet has been submitted for review based on a user report and blockchain activity.
-        </p>
       </div>
-      <div class="hero-right">
+    </section>
+
+    <section class="partners">
+      <div class="partners-row">
+        <div class="label">Our Partners:</div>
+        <img class="partner-logo" src="./assets/canada.svg" alt="Canada (placeholder)"/>
+        <img class="partner-logo" src="./assets/newton.svg" alt="Newton Crypto (placeholder)"/>
+        <img class="partner-logo" src="./assets/chainalysis.svg" alt="Chainalysis (placeholder)"/>
+        <img class="partner-logo" src="./assets/opp.svg" alt="OPP (placeholder)"/>
+      </div>
+    </section>
+
+    <section class="section" id="victims">
+      <h2>Scammers rely on anonymity. We make reporting easy.</h2>
+      <div class="cards">
         <div class="card">
-          <div class="card-title">How it works</div>
-          <ol class="steps">
-            <li>Submit the wallet(s) you sent funds to</li>
-            <li>We generate an automated tracing report</li>
-            <li>Reports are routed automatically (no direct police contact)</li>
-          </ol>
-          <div class="mini-disclaimer">
-            <strong>Disclaimer:</strong> We do not contact police departments or investigating officers directly. Reports are generated and delivered automatically by our system.
-          </div>
-        </div>
-
-        <div class="card subtle">
-          <div class="card-title">Partners (demo)</div>
-          <div class="partner-row">
-            <span class="pill">Government of Canada</span>
-            <span class="pill">Newton Crypto</span>
-            <span class="pill">Chainalysis</span>
-            <span class="pill">OPP</span>
-          </div>
-          <div class="muted small">
-            Logos are not included in this starter zip. Add them later once you have permission and official assets.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="tab-section" id="victims">
-      <div class="tab-grid">
-        <div class="tab-card">
           <h3>For Victims</h3>
-          <p>Submit with a police report (free), pay 100 USDC without a police report, or report a crypto ATM deposit.</p>
-          <button class="btn btn-primary btn-sm openReportAny">Report a Wallet</button>
+          <p>Report suspicious wallets involved in scams to help prevent future losses. Choose free (with police report), paid (100 USDC), or crypto ATM deposit.</p>
         </div>
-        <div class="tab-card" id="law">
+        <div class="card" id="law">
           <h3>For Law Enforcement</h3>
-          <p>Standardized intake + automated tracing summaries with audit-ready artifacts.</p>
+          <p>Discover and track illicit wallets to aid investigations and disrupt crypto crime. Receive standardized, automated tracing summaries and artifacts.</p>
         </div>
-        <div class="tab-card" id="influencers">
+        <div class="card" id="influencers">
           <h3>For Influencers & NGOs</h3>
-          <p>Embed the reporting widget to route victims to an official, safe intake process.</p>
-        </div>
-        <div class="tab-card" id="gov">
-          <h3>Government & Regulators</h3>
-          <p>Reporting infrastructure and evidence packaging designed for trust and oversight.</p>
+          <p>Embed our reporting widget to route victims to an official, safe intake process — and reduce impersonation risk.</p>
         </div>
       </div>
     </section>
 
-    <section class="footer-note">
-      <h3>Important Warning</h3>
-      <p>Scammers may impersonate us. Always verify our official domain and trusted partner links.</p>
-      <p class="fineprint">
-        Wallet Reporters does not contact police departments or investigating officers. All submissions generate automated reports only.
-        Identity verification (when required) is performed by third-party providers. We do not receive or store personal identity data from those services.
-      </p>
+    <section class="section" id="gov">
+      <div class="lower">
+        <div class="card">
+          <h2>How It Works</h2>
+          <div class="checks" style="margin-top:0">
+            <div class="item"><div class="check">✓</div><div>Victims are never asked for private keys.</div></div>
+            <div class="item"><div class="check">✓</div><div>Reports do not imply guilt — they provide leads.</div></div>
+            <div class="item"><div class="check">✓</div><div>Automated tracing report generation.</div></div>
+            <div class="item"><div class="check">✓</div><div>Reports routed automatically (no direct police contact).</div></div>
+          </div>
+          <p style="margin-top:12px;color:var(--muted)"><strong>Disclaimer:</strong> We do not contact police departments or investigating officers directly. All submissions generate automated reports.</p>
+          <button class="btn btn-dark" id="openReportLower">Detailed Process Overview (demo)</button>
+        </div>
+
+        <div class="card">
+          <h2>Recent Wallet Reports</h2>
+          <table class="table">
+            <thead><tr><th>ID</th><th>Coin</th><th>Reported Wallet</th><th>Status</th></tr></thead>
+            <tbody id="recentReports"></tbody>
+          </table>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px">
+            <a class="btn" href="./registry.html">View All Reports →</a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <!-- Modal -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        Wallet Reporters does not contact police departments or investigating officers. All submissions generate automated reports only.
+        Identity verification (when required) is performed by third-party providers. We do not receive or store personal identity data from those services.
+      </p>
+    </div>
+  </footer>
+
   <div id="wrModal" class="wr-modal" aria-hidden="true">
     <div class="wr-modal-backdrop" data-close></div>
     <div class="wr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="wrModalTitle">
@@ -118,9 +136,7 @@
       <div class="wr-modal-body">
         <div id="wallet-reporters-widget"></div>
       </div>
-      <div class="wr-modal-footer">
-        <small>We do not recover funds. We do not ask for private keys.</small>
-      </div>
+      <div class="wr-modal-footer"><small>We do not recover funds. We do not ask for private keys.</small></div>
     </div>
   </div>
 

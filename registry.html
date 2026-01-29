@@ -1,49 +1,50 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Registry • Wallet Reporters</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css"/>
 </head>
 <body>
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">WR</div>
-      <div class="brand-text">
-        <div class="brand-title">Wallet Reporters</div>
-        <div class="brand-sub">Registry Explorer (demo)</div>
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <div class="brand">
+          <img src="./assets/logo.png" alt="Wallet Reporters logo" onerror="this.style.display='none'"/>
+          <div>
+            <div class="brand-title">Wallet Reporters</div>
+            <div class="brand-sub">Registry</div>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="./index.html">Home</a>
+          <button class="btn btn-green" id="openReportTop">Report a Wallet →</button>
+        </div>
       </div>
     </div>
-    <nav class="nav">
-      <a class="btn btn-ghost" href="./index.html">Home</a>
-      <button id="openReport" class="btn btn-primary">Report a Wallet</button>
-    </nav>
-  </header>
+  </div>
 
-  <main class="container">
-    <section class="card">
-      <h1 class="h2">Search the Registry</h1>
-      <p class="muted">Demo-only list. Replace with your real backend later.</p>
-
-      <div class="row">
-        <input id="searchWallet" class="input" placeholder="Paste a wallet address…" />
-        <button id="searchBtn" class="btn btn-primary">Search</button>
+  <main class="container" style="padding-top:22px">
+    <div class="card">
+      <h2 style="margin:0 0 8px">Search the Registry</h2>
+      <p style="margin:0 0 14px;color:var(--muted)">Demo list stored in your browser. Replace with backend later.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input id="searchWallet" class="wr-input" placeholder="Paste a wallet address…"/>
+        <button class="btn btn-dark" id="searchBtn">Search</button>
       </div>
+      <div id="searchResult" style="margin-top:12px;color:var(--muted)"></div>
+    </div>
 
-      <div id="searchResult" class="muted" style="margin-top:12px;"></div>
-    </section>
-
-    <section class="card">
-      <h2 class="h3">Recent Wallet Reports (demo)</h2>
-      <div class="table" id="recentTable"></div>
-      <p class="fineprint" style="margin-top:10px;">
-        A reported wallet does not imply wrongdoing. It indicates a wallet has been submitted for review.
-      </p>
-    </section>
+    <div class="card" style="margin-top:14px">
+      <h2 style="margin:0 0 10px">Recent Wallet Reports</h2>
+      <table class="table">
+        <thead><tr><th>ID</th><th>Coin</th><th>Reported Wallet</th><th>Status</th></tr></thead>
+        <tbody id="recentReports"></tbody>
+      </table>
+    </div>
   </main>
 
-  <!-- Modal -->
   <div id="wrModal" class="wr-modal" aria-hidden="true">
     <div class="wr-modal-backdrop" data-close></div>
     <div class="wr-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="wrModalTitle">
@@ -54,9 +55,7 @@
       <div class="wr-modal-body">
         <div id="wallet-reporters-widget"></div>
       </div>
-      <div class="wr-modal-footer">
-        <small>We do not recover funds. We do not ask for private keys.</small>
-      </div>
+      <div class="wr-modal-footer"><small>We do not recover funds. We do not ask for private keys.</small></div>
     </div>
   </div>
 

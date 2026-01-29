@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="46" viewBox="0 0 200 46">
+      <rect width="200" height="46" rx="10" fill="#fff" stroke="#e5e7eb"/>
+      <rect x="12" y="12" width="22" height="22" rx="6" fill="#111827"/>
+      <path d="M18 27 h10" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M18 19 h10" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <text x="46" y="29" font-family="system-ui,Segoe UI,Arial" font-size="16" font-weight="800" fill="#111827">Chainalysis</text>
+    </svg>

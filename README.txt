@@ -1,13 +1,15 @@
-Wallet Reporters – Cloudflare Pages (Full Starter)
+Wallet Reporters — Cloudflare Pages (mockup-style)
 
-This is a static site intended for Cloudflare Pages.
+Upload everything in this zip to your GitHub repo root (recommended) or directly into Pages.
 
-Deploy (GitHub method recommended):
-- Pages project -> Connect to GitHub -> select your repo
-- Framework preset: None
-- Build command: (blank)
-- Output directory: /
-- Root directory: (blank)
+Files:
+- index.html
+- registry.html
+- styles.css
+- main.js
+- wallet-reporters-snippet.js
+- assets/*
 
-If you're currently seeing a plain 'Starter site' page, you deployed a different minimal bundle earlier.
-Replace the repo files with the contents of this zip, commit, then redeploy Pages.
+Notes:
+- Partner logos in assets/ are placeholders. Swap with official assets once you have permission.
+- This is a static demo; reports are stored in your browser (localStorage).
