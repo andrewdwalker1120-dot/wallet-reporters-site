@@ -186,7 +186,7 @@
     }
   }
 
-  function submit(){
+  async function submit(){
     const errors=[];
     const reported = state.wallets.map(w=>(w||"").trim()).filter(Boolean);
     if (!reported.length) errors.push("Enter at least one scammer wallet address.");
@@ -206,16 +206,44 @@
     }
     if (errors.length){ alert(errors.join("\n")); return; }
 
-    const report = { report_id:"WR-"+Math.random().toString(16).slice(2,10).toUpperCase(), coin:"USDC", reported_wallets:reported, status:"Just now" };
-    const existing = JSON.parse(localStorage.getItem("wr_demo_reports") || "[]");
-    existing.push(report);
-    localStorage.setItem("wr_demo_reports", JSON.stringify(existing));
+    const apiBase = (window.WR_API_BASE || "").replace(/\/$/, "");
+    const url = apiBase + "/api/reports";
 
-    const receipt=document.getElementById("wrReceipt");
-    if (receipt){
-      receipt.style.display="block";
-      receipt.innerHTML = `<div class="wr-section-title">Submitted (Demo)</div>
-        <div class="wr-help" style="font-size:13px"><strong>Report ID:</strong> ${esc(report.report_id)}<br>
+    const payload = {
+      mode: state.mode,
+      reporter_email: email,
+      your_wallet: yourWallet,
+      tx_hash: tx,
+      wallets: reported,
+      wallet_dates: state.wallet_dates || []
+    };
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        alert((data && data.error) ? data.error : "Submission failed. Please try again.");
+        return;
+      }
+
+      const receipt=document.getElementById("wrReceipt");
+      if (receipt){
+        receipt.style.display="block";
+        receipt.innerHTML = `<div class="wr-section-title">Submitted (Demo)</div>
+          <div class="wr-help" style="font-size:13px">
+            <strong>Report ID:</strong> ${esc(data.report_id || data.reportId || "WR-UNKNOWN")}<br>
+            We will email a tracing report for this demo. Production deployments will not require email.
+          </div>`;
+      }
+    } catch (e) {
+      alert("Network error. Please try again.");
+      return;
+    }
+t_id)}<br>
         Saved locally for demo purposes. Connect to your backend later.</div>`;
     }
   }
