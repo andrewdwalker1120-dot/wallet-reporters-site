@@ -64,6 +64,11 @@
         <div class="wr-help">We will never ask for private keys or seed phrases.</div>
       </div>
       <div class="wr-field">
+        <label class="wr-label">Email address (required)</label>
+        <input class="wr-input" id="wrEmail" type="email" placeholder="you@example.com" />
+        <div class="wr-help">Email is required to receive a tracing report in this demo. Production deployments will not require email.</div>
+      </div>
+      <div class="wr-field">
         <label class="wr-label">Transaction hash ${txReq}</label>
         <input class="wr-input" id="wrTxHash" placeholder="0x… transaction hash" />
       </div>
@@ -186,7 +191,9 @@
     const reported = state.wallets.map(w=>(w||"").trim()).filter(Boolean);
     if (!reported.length) errors.push("Enter at least one scammer wallet address.");
     const yourWallet=(document.getElementById("wrYourWallet")?.value||"").trim();
+    const email=(document.getElementById("wrEmail")?.value||"").trim();
     if (!yourWallet) errors.push("Your wallet address is required.");
+    if (!email) errors.push("Email address is required to receive the tracing report.");
     const tx=(document.getElementById("wrTxHash")?.value||"").trim();
     if (state.mode==="atm" && !tx) errors.push("Transaction hash is required for ATM reports.");
     if (!document.getElementById("wrTruth")?.checked) errors.push("Please confirm the report is truthful.");
