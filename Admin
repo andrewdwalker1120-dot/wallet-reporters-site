@@ -51,9 +51,20 @@
     url.searchParams.set("limit", "50");
 
     try {
-      const res = await fetch(url.toString(), {
-        method: "GET",
-        credentials: "include" // IMPORTANT for Cloudflare Access cookies
+      clet key = localStorage.getItem("WR_ADMIN_KEY");
+if (!key) {
+  key = prompt("Enter admin password:");
+  if (!key) return;
+  localStorage.setItem("WR_ADMIN_KEY", key);
+}
+
+const res = await fetch(url.toString(), {
+  method: "GET",
+  headers: {
+    "x-admin-key": key
+  }
+});
+
       });
 
       if (res.status === 401 || res.status === 403) {
