@@ -61,5 +61,155 @@
 
   <script src="./main.js"></script>
   <script src="./wallet-reporters-snippet.js"></script>
+<script>
+(function () {
+  const API = (window.WR_API_BASE || "").replace(/\/$/, "");
+  if (!API) {
+    alert("WR_API_BASE is not set. Add it in index.html <head>.");
+    return;
+  }
+
+  function el(tag, attrs = {}, children = []) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "style") Object.assign(n.style, v);
+      else if (k.startsWith("on") && typeof v === "function") n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v);
+    }
+    for (const c of children) n.append(c);
+    return n;
+  }
+
+  async function loadReports(wallet) {
+    status.textContent = "Loading…";
+    results.innerHTML = "";
+
+    try {
+      const res = await fetch(`${API}/api/reports?wallet=${encodeURIComponent(wallet)}`, {
+        method: "GET"
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) {
+        console.error("Load failed:", res.status, data);
+        status.textContent = "Failed to load reports. Check console.";
+        return;
+      }
+
+      const rows = Array.isArray(data.results) ? data.results : [];
+      status.textContent = rows.length ? `Found ${rows.length} report(s).` : "No reports found.";
+
+      const table = el("table", { style: {
+        width: "100%",
+        borderCollapse: "collapse",
+        marginTop: "12px"
+      }});
+
+      const thead = el("thead");
+      const headerRow = el("tr", {}, [
+        el("th", { style: thStyle }, [document.createTextNode("Time")]),
+        el("th", { style: thStyle }, [document.createTextNode("Category")]),
+        el("th", { style: thStyle }, [document.createTextNode("Message")]),
+        el("th", { style: thStyle }, [document.createTextNode("URL")]),
+        el("th", { style: thStyle }, [document.createTextNode("ID")]),
+      ]);
+      thead.append(headerRow);
+      table.append(thead);
+
+      const tbody = el("tbody");
+      for (const r of rows) {
+        const dt = r.created_at ? new Date(r.created_at * 1000).toLocaleString() : "";
+        const url = r.url || "";
+        const tr = el("tr", {}, [
+          el("td", { style: tdStyle }, [document.createTextNode(dt)]),
+          el("td", { style: tdStyle }, [document.createTextNode(r.category || "")]),
+          el("td", { style: tdStyle }, [document.createTextNode(r.message || "")]),
+          el("td", { style: tdStyle }, [
+            url ? el("a", { href: url, target: "_blank", rel: "noreferrer" }, [document.createTextNode("link")]) : document.createTextNode("")
+          ]),
+          el("td", { style: tdStyle }, [document.createTextNode(r.id || "")]),
+        ]);
+        tbody.append(tr);
+      }
+      table.append(tbody);
+      results.append(table);
+    } catch (e) {
+      console.error(e);
+      status.textContent = "Network error. Check console.";
+    }
+  }
+
+  const thStyle = {
+    textAlign: "left",
+    borderBottom: "1px solid #ddd",
+    padding: "8px",
+    fontWeight: "600"
+  };
+
+  const tdStyle = {
+    borderBottom: "1px solid #eee",
+    padding: "8px",
+    verticalAlign: "top"
+  };
+
+  // Build a simple UI even if the page had nothing
+  const wrapper = el("div", { style: {
+    maxWidth: "900px",
+    margin: "24px auto",
+    padding: "0 16px",
+    fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+  }});
+
+  const title = el("h1", { style: { margin: "0 0 12px 0" } }, [document.createTextNode("Wallet Reports Registry")]);
+  const hint = el("div", { style: { marginBottom: "12px", color: "#555" } }, [
+    document.createTextNode("Enter a wallet address to view reports stored in D1.")
+  ]);
+
+  const input = el("input", {
+    type: "text",
+    placeholder: "0x… wallet address",
+    style: {
+      width: "100%",
+      padding: "10px",
+      fontSize: "16px",
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+      boxSizing: "border-box"
+    }
+  });
+
+  const btn = el("button", { style: {
+    marginTop: "10px",
+    padding: "10px 14px",
+    fontSize: "16px",
+    border: "0",
+    borderRadius: "8px",
+    cursor: "pointer"
+  }, onclick: () => {
+    const wallet = input.value.trim();
+    if (!wallet) return alert("Enter a wallet address first.");
+    // update URL for shareable links
+    const u = new URL(window.location.href);
+    u.searchParams.set("wallet", wallet);
+    history.replaceState(null, "", u.toString());
+    loadReports(wallet);
+  }}, [document.createTextNode("Load reports")]);
+
+  const status = el("div", { style: { marginTop: "12px" } }, []);
+  const results = el("div", { style: { marginTop: "8px" } }, []);
+
+  wrapper.append(title, hint, input, btn, status, results);
+
+  // Put it at the top of <body>
+  document.body.prepend(wrapper);
+
+  // Auto-load if ?wallet= is present
+  const initialWallet = new URL(window.location.href).searchParams.get("wallet");
+  if (initialWallet) {
+    input.value = initialWallet;
+    loadReports(initialWallet);
+  }
+})();
+</script>
 </body>
 </html>
