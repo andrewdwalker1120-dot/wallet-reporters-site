@@ -1,128 +1,140 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Wallet Reporters Admin</title>
-  <script>
-    window.WR_API_BASE = "https://wallet-reporters-backend-api.bmmthpfbrs.workers.dev";
-  </script>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
-    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    input { padding:10px; border:1px solid #ccc; border-radius:8px; min-width: 320px; }
-    button { padding:10px 14px; border:0; border-radius:8px; cursor:pointer; }
-    table { width:100%; border-collapse: collapse; margin-top: 14px; }
-    th, td { text-align:left; padding:10px; border-bottom:1px solid #eee; vertical-align: top; }
-    th { border-bottom:1px solid #ddd; }
-    .muted { color:#666; }
-    .pill { font-size:12px; padding:2px 8px; border:1px solid #ddd; border-radius:999px; display:inline-block; }
-  </style>
-</head>
-<body>
-  <h1>Wallet Reporters — Admin</h1>
-  <p class="muted">Protected by Cloudflare Access. If you aren’t logged in, you’ll be redirected to sign in.</p>
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const origin = request.headers.get("Origin") || "*";
 
-  <div class="row">
-    <input id="q" placeholder="Search wallet or email (leave blank for latest)" />
-    <button id="load">Load</button>
-    <span id="status" class="muted"></span>
-  </div>
+    const cors = {
+      "Access-Control-Allow-Origin": origin,
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Credentials": "true",
+    };
 
-  <div id="results"></div>
-
-<script>
-(function () {
-  const API = (window.WR_API_BASE || "").replace(/\/$/, "");
-  const q = document.getElementById("q");
-  const loadBtn = document.getElementById("load");
-  const status = document.getElementById("status");
-  const results = document.getElementById("results");
-
-  function esc(s){ return (s ?? "").toString(); }
-
-  async function load() {
-    status.textContent = "Loading…";
-    results.innerHTML = "";
-
-    const query = q.value.trim();
-    const url = new URL(API + "/api/admin/reports");
-    if (query) url.searchParams.set("q", query);
-    url.searchParams.set("limit", "50");
-
-    try {
-      clet key = localStorage.getItem("WR_ADMIN_KEY");
-if (!key) {
-  key = prompt("Enter admin password:");
-  if (!key) return;
-  localStorage.setItem("WR_ADMIN_KEY", key);
-}
-
-const res = await fetch(url.toString(), {
-  method: "GET",
-  headers: {
-    "x-admin-key": key
-  }
-});
-
-      });
-
-      if (res.status === 401 || res.status === 403) {
-        status.textContent = "Not authorized. (Cloudflare Access will usually redirect—try reloading.)";
-        return;
-      }
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) {
-        console.error("Admin load failed:", res.status, data);
-        status.textContent = "Failed. Open DevTools Console.";
-        return;
-      }
-
-      const rows = data.results || [];
-      status.textContent = `Showing ${rows.length} report(s).`;
-
-      const table = document.createElement("table");
-      table.innerHTML = `
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Wallet</th>
-            <th>Email</th>
-            <th>Message</th>
-            <th>Category</th>
-            <th>ID</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      `;
-
-      const tbody = table.querySelector("tbody");
-      for (const r of rows) {
-        const tr = document.createElement("tr");
-        const dt = r.created_at ? new Date(r.created_at * 1000).toLocaleString() : "";
-        tr.innerHTML = `
-          <td>${esc(dt)}</td>
-          <td><span class="pill">${esc(r.wallet_address)}</span></td>
-          <td>${esc(r.email)}</td>
-          <td>${esc(r.message || "")}</td>
-          <td>${esc(r.category || "")}</td>
-          <td>${esc(r.id)}</td>
-        `;
-        tbody.appendChild(tr);
-      }
-
-      results.appendChild(table);
-    } catch (e) {
-      console.error(e);
-      status.textContent = "Network error. Open DevTools Console.";
+    if (request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: cors });
     }
-  }
 
-  loadBtn.addEventListener("click", load);
-  // auto-load on open
-  load();
-})();
-</script>
-</body>
-</html>
+    if (request.method === "GET" && url.pathname === "/") {
+      return json({ ok: true, service: "wallet-reporters-backend" }, cors);
+    }
+
+    // =========================
+    // PUBLIC: submit report
+    // =========================
+    if (request.method === "POST" && url.pathname === "/api/reports") {
+      let body;
+      try {
+        body = await request.json();
+      } catch {
+        return json({ ok: false, error: "Invalid JSON" }, cors, 400);
+      }
+
+      const wallet_address = String(body.wallet_address || "").trim();
+      const email = String(body.email || "").trim();
+      const category = body.category ? String(body.category).trim() : null;
+      const message = body.message ? String(body.message).trim() : null;
+      const report_url = body.url ? String(body.url).trim() : null;
+
+      if (!wallet_address) {
+        return json({ ok: false, error: "wallet_address is required" }, cors, 400);
+      }
+      if (!email) {
+        return json({ ok: false, error: "email is required (demo only)" }, cors, 400);
+      }
+
+      const id = crypto.randomUUID();
+      const created_at = Math.floor(Date.now() / 1000);
+
+      await env.wallet_reporters
+        .prepare(
+          `INSERT INTO reports (id, wallet_address, email, category, message, url, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`
+        )
+        .bind(id, wallet_address, email, category, message, report_url, created_at)
+        .run();
+
+      return json({ ok: true, id, created_at }, cors);
+    }
+
+    // =========================
+    // PUBLIC: lookup by wallet
+    // =========================
+    if (request.method === "GET" && url.pathname === "/api/reports") {
+      const wallet = (url.searchParams.get("wallet") || "").trim();
+      if (!wallet) {
+        return json({ ok: false, error: "wallet query param required" }, cors, 400);
+      }
+
+      const { results } = await env.wallet_reporters
+        .prepare(
+          `SELECT id, wallet_address, category, message, url, created_at
+           FROM reports
+           WHERE wallet_address = ?
+           ORDER BY created_at DESC
+           LIMIT 100`
+        )
+        .bind(wallet)
+        .all();
+
+      return json({ ok: true, results }, cors);
+    }
+
+    // =========================
+    // ADMIN (password protected)
+    // =========================
+    if (
+      request.method === "GET" &&
+      (url.pathname === "/api/admin/reports" ||
+        url.pathname === "/api/admin/reports/")
+    ) {
+      const adminKey = request.headers.get("x-admin-key");
+      if (!adminKey || adminKey !== env.ADMIN_KEY) {
+        return json({ ok: false, error: "Unauthorized" }, cors, 401);
+      }
+
+      const q = (url.searchParams.get("q") || "").trim();
+      const limitRaw = parseInt(url.searchParams.get("limit") || "50", 10);
+      const limit = Number.isFinite(limitRaw)
+        ? Math.min(Math.max(limitRaw, 1), 200)
+        : 50;
+
+      let stmt;
+      if (!q) {
+        stmt = env.wallet_reporters.prepare(
+          `SELECT id, wallet_address, email, category, message, url, created_at
+           FROM reports
+           ORDER BY created_at DESC
+           LIMIT ?`
+        ).bind(limit);
+      } else if (q.includes("@")) {
+        stmt = env.wallet_reporters.prepare(
+          `SELECT id, wallet_address, email, category, message, url, created_at
+           FROM reports
+           WHERE email LIKE ?
+           ORDER BY created_at DESC
+           LIMIT ?`
+        ).bind(`%${q}%`, limit);
+      } else {
+        stmt = env.wallet_reporters.prepare(
+          `SELECT id, wallet_address, email, category, message, url, created_at
+           FROM reports
+           WHERE wallet_address LIKE ?
+           ORDER BY created_at DESC
+           LIMIT ?`
+        ).bind(`%${q}%`, limit);
+      }
+
+      const { results } = await stmt.all();
+      return json({ ok: true, results }, cors);
+    }
+
+    return json({ ok: false, error: "Not found" }, cors, 404);
+  },
+};
+
+function json(obj, corsHeaders, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { "Content-Type": "application/json", ...corsHeaders },
+  });
+}
