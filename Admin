@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wallet Reporters Admin</title>
+  <script>
+    window.WR_API_BASE = "https://wallet-reporters-backend-api.bmmthpfbrs.workers.dev";
+  </script>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    input { padding:10px; border:1px solid #ccc; border-radius:8px; min-width: 320px; }
+    button { padding:10px 14px; border:0; border-radius:8px; cursor:pointer; }
+    table { width:100%; border-collapse: collapse; margin-top: 14px; }
+    th, td { text-align:left; padding:10px; border-bottom:1px solid #eee; vertical-align: top; }
+    th { border-bottom:1px solid #ddd; }
+    .muted { color:#666; }
+    .pill { font-size:12px; padding:2px 8px; border:1px solid #ddd; border-radius:999px; display:inline-block; }
+  </style>
+</head>
+<body>
+  <h1>Wallet Reporters — Admin</h1>
+  <p class="muted">Protected by Cloudflare Access. If you aren’t logged in, you’ll be redirected to sign in.</p>
+
+  <div class="row">
+    <input id="q" placeholder="Search wallet or email (leave blank for latest)" />
+    <button id="load">Load</button>
+    <span id="status" class="muted"></span>
+  </div>
+
+  <div id="results"></div>
+
+<script>
+(function () {
+  const API = (window.WR_API_BASE || "").replace(/\/$/, "");
+  const q = document.getElementById("q");
+  const loadBtn = document.getElementById("load");
+  const status = document.getElementById("status");
+  const results = document.getElementById("results");
+
+  function esc(s){ return (s ?? "").toString(); }
+
+  async function load() {
+    status.textContent = "Loading…";
+    results.innerHTML = "";
+
+    const query = q.value.trim();
+    const url = new URL(API + "/api/admin/reports");
+    if (query) url.searchParams.set("q", query);
+    url.searchParams.set("limit", "50");
+
+    try {
+      const res = await fetch(url.toString(), {
+        method: "GET",
+        credentials: "include" // IMPORTANT for Cloudflare Access cookies
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        status.textContent = "Not authorized. (Cloudflare Access will usually redirect—try reloading.)";
+        return;
+      }
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        console.error("Admin load failed:", res.status, data);
+        status.textContent = "Failed. Open DevTools Console.";
+        return;
+      }
+
+      const rows = data.results || [];
+      status.textContent = `Showing ${rows.length} report(s).`;
+
+      const table = document.createElement("table");
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Wallet</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Category</th>
+            <th>ID</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+
+      const tbody = table.querySelector("tbody");
+      for (const r of rows) {
+        const tr = document.createElement("tr");
+        const dt = r.created_at ? new Date(r.created_at * 1000).toLocaleString() : "";
+        tr.innerHTML = `
+          <td>${esc(dt)}</td>
+          <td><span class="pill">${esc(r.wallet_address)}</span></td>
+          <td>${esc(r.email)}</td>
+          <td>${esc(r.message || "")}</td>
+          <td>${esc(r.category || "")}</td>
+          <td>${esc(r.id)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      results.appendChild(table);
+    } catch (e) {
+      console.error(e);
+      status.textContent = "Network error. Open DevTools Console.";
+    }
+  }
+
+  loadBtn.addEventListener("click", load);
+  // auto-load on open
+  load();
+})();
+</script>
+</body>
+</html>
